@@ -1,14 +1,15 @@
 [tool.poetry]
-name = "ETH_quote_allert_app"
+name = "eth-quote-allert-app"
 version = "0.1.0"
 description = ""
 authors = ["Dmitry Lvovich Grachev <grdmitriyl@gmail.com>"]
 readme = "README.md"
-packages = [{include = "real_time_crypto_quotes"}]
+packages = [{include = "eth_quote_allert_app"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 aiohttp = "^3.8.4"
+
 
 [build-system]
 requires = ["poetry-core"]
