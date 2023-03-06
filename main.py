@@ -6,6 +6,12 @@ import aiohttp
 
 
 class AllertApp:
+    '''
+    God-object app.
+    It get real-time quotes
+    Calculates own-Etherium price (without correlation with BTC)
+    Allert if given condition satisfied
+    '''
 
     def __init__(self, api_url: str, payload_btc: dict, payload_eth: dict,
                  api_request_frequency: int=1):
@@ -47,11 +53,11 @@ class AllertApp:
     def adjust_eth_price(self) -> None:
         '''
         1) Reads last entry in self.quote_table which looks like
-        [
-            datetime.datetime(2023, 2, 20, 12, 21, 8, 858646),
-            {'BTCUSDT': 24436.9},
-            {'ETHUSDT': 1698.61},
-        ]
+        {
+            'time': datetime.datetime(2023, 2, 20, 12, 21, 8, 858646),
+            'BTCUSDT': 24436.9,
+            'ETHUSDT': 1698.61,
+            }
         2) Calculates adjusted price subtracting BTC influence with
         correlation coefficient from the article
         https://fsr-develop.ru/korrelyaciya-kriptovaljut
@@ -153,13 +159,12 @@ class AllertApp:
         retutn a warning message or an empty string, depending on
         whether or not the conditions have satisfied
         '''
-        if ((ratio := self.max_eth_adjusted_quote['price'] /
-             self.min_eth_adjusted_quote['price']) >= alert_ratio):
+        ratio = self.max_eth_adjusted_quote['price'] / self.min_eth_adjusted_quote['price']
+        if ratio >= alert_ratio:
             percent_change = 100 * (ratio - 1)
             return f'Alert! price have changed by {percent_change:.2f}% '
         else:
             return ''
-
 
     async def run(self) -> None:
         '''
